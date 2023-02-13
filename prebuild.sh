@@ -223,14 +223,6 @@ popd
 
 pushd "$mozilla_release"
 
-# Remove proprietary libraries
-sed -i \
-    -e '/com.google.android.gms/d' \
-    mobile/android/geckoview/build.gradle
-
-# Patch the use of proprietary libraries
-patch -p1 --no-backup-if-mismatch --quiet < "$patches/gecko-liberate.patch"
-
 # Remove Mozilla repositories substitution and explicitly add the required ones
 sed -i \
     -e '/maven {/,/}$/d; /gradle.mozconfig.substs/,/}$/{N;d;}' \
@@ -283,9 +275,6 @@ pref("media.gmp-gmpopenh264.enabled", false);
 
 // Disable casting (Roku, Chromecast)
 pref("browser.casting.enabled", false);
-
-// Disable WebAuthn, since it is a stub
-pref("security.webauth.webauthn", false);
 EOF
 
 popd
